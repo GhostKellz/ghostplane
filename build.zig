@@ -17,10 +17,20 @@ pub fn build(b: *std.Build) void {
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall. Here we do not
     // set a preferred release mode, allowing the user to decide how to optimize.
     const optimize = b.standardOptimizeOption(.{});
-    // It's also possible to define more custom flags to toggle optional features
-    // of this build script using `b.option()`. All defined flags (including
-    // target and optimize options) will be listed when running `zig build --help`
-    // in this directory.
+    
+    // Get external dependencies
+    const tokioZ = b.dependency("TokioZ", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    const shroud = b.dependency("shroud", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    const ghostbridge = b.dependency("ghostbridge", .{
+        .target = target,
+        .optimize = optimize,
+    });
 
     // This creates a module, which represents a collection of source files alongside
     // some compilation options, such as optimization mode and linked system libraries.
@@ -30,16 +40,13 @@ pub fn build(b: *std.Build) void {
     // multiple modules and consumers will need to be able to specify which
     // module they want to access.
     const mod = b.addModule("ghostplane", .{
-        // The root source file is the "entry point" of this module. Users of
-        // this module will only be able to access public declarations contained
-        // in this file, which means that if you have declarations that you
-        // intend to expose to consumers that were defined in other files part
-        // of this module, you will have to make sure to re-export them from
-        // the root file.
         .root_source_file = b.path("src/root.zig"),
-        // Later on we'll use this module as the root module of a test executable
-        // which requires us to specify a target.
         .target = target,
+        .imports = &.{
+            .{ .name = "tokioZ", .module = tokioZ.module("TokioZ") },
+            .{ .name = "shroud", .module = shroud.module("shroud") },
+            .{ .name = "ghostbridge", .module = ghostbridge.module("ghostbridge") },
+        },
     });
 
     // Here we define an executable. An executable needs to have a root module

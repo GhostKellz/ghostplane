@@ -1,4 +1,4 @@
-# 🚘 Ghostplane
+# ✈️Ghostplane
 
 > ⚡ The high-speed, zero-trust Layer 2 execution environment for Ghostchain — built in Zig.
 

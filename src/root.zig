@@ -1,24 +1,37 @@
-//! By convention, root.zig is the root source file when making a library.
 const std = @import("std");
 
-pub fn bufferedPrint() !void {
-    // Stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
-    const stdout_file = std.io.getStdOut().writer();
-    // Buffering can improve performance significantly in print-heavy programs.
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
+// Core Ghostplane modules
+pub const Engine = @import("engine.zig").Engine;
+pub const Transaction = @import("transaction.zig").Transaction;
+pub const Batch = @import("batch.zig").Batch;
 
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
+pub const runtime = @import("runtime/runtime.zig");
+pub const transport = @import("transport/transport.zig");
+pub const crypto = @import("crypto/crypto.zig");
+pub const identity = @import("identity/identity.zig");
+pub const ledger = @import("ledger/ledger.zig");
 
-    try bw.flush(); // Don't forget to flush!
-}
+// External dependencies - Ghostchain Stack modules
+pub const tokioZ = @import("tokioZ");
+pub const shroud = @import("shroud");
+pub const ghostbridge = @import("ghostbridge");
 
-pub fn add(a: i32, b: i32) i32 {
-    return a + b;
-}
+// Shroud v0.3.0 submodules accessed through main shroud module
+pub const ghostcipher = shroud.ghostcipher;
+pub const sigil = shroud.sigil;
+pub const ghostwire = shroud.ghostwire;
+pub const keystone = shroud.keystone;
+pub const zns = shroud.zns;
+pub const gwallet = shroud.gwallet;
+pub const guardian = shroud.guardian;
+pub const covenant = shroud.covenant;
+pub const shadowcraft = shroud.shadowcraft;
 
-test "basic add functionality" {
-    try std.testing.expect(add(3, 7) == 10);
+// Legacy compatibility
+pub const zcrypto = shroud.zcrypto;
+pub const zsig = shroud.zsig;
+pub const realid = shroud.realid;
+
+test {
+    std.testing.refAllDecls(@This());
 }

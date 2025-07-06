@@ -1,26 +1,38 @@
 const std = @import("std");
 const ghostplane = @import("ghostplane");
 
+const log = std.log.scoped(.ghostplane);
+
 pub fn main() !void {
-    // Prints to stderr, ignoring potential errors.
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
-    try ghostplane.bufferedPrint();
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
+
+    log.info("🛸 Ghostplane L2 execution engine starting...", .{});
+    
+    var engine = try ghostplane.Engine.init(allocator, .{
+        .port = 8080,
+        .enable_quic = true,
+        .enable_http3 = true,
+    });
+    defer engine.deinit();
+
+    log.info("✅ Ghostplane initialized on port {}", .{engine.config.port});
+    log.info("🔐 Zero-trust L2 execution layer ready", .{});
+    
+    try engine.run();
 }
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // Try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
-}
-
-test "fuzz example" {
-    const Context = struct {
-        fn testOne(context: @This(), input: []const u8) anyerror!void {
-            _ = context;
-            // Try passing `--fuzz` to `zig build test` and see if it manages to fail this test case!
-            try std.testing.expect(!std.mem.eql(u8, "canyoufindme", input));
-        }
-    };
-    try std.testing.fuzz(Context{}, Context.testOne, .{});
+test "ghostplane engine initialization" {
+    const testing = std.testing;
+    const allocator = testing.allocator;
+    
+    var engine = try ghostplane.Engine.init(allocator, .{
+        .port = 0,
+        .enable_quic = false,
+        .enable_http3 = false,
+    });
+    defer engine.deinit();
+    
+    try testing.expect(engine.config.port == 0);
 }
