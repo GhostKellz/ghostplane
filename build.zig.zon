@@ -33,16 +33,16 @@
     // internet connectivity.
     .dependencies = .{
         .TokioZ = .{
-            .url = "https://github.com/ghostkellz/tokioZ/archive/refs/heads/main.tar.gz",
+            .url = "https://github.com/ghostkellz/tokioZ/archive/main.tar.gz",
             .hash = "TokioZ-0.0.0-DgtPReljAgAuGaoLtQCm_E-UA_7j_TAGQ8kkV-mtjz4V",
         },
         .shroud = .{
             .url = "https://github.com/ghostkellz/shroud/archive/main.tar.gz",
-            .hash = "shroud-0.3.0-z7C8mW1BAAAOOfg22zovePMiz9RMzRJD1XFGU-oVYRJu",
+            .hash = "shroud-0.5.0-z7C8mUBi5Acgo0PJIvKPC33P79z0uzwYWEjs1ApNoli-",
         },
         .ghostbridge = .{
-            .url = "https://github.com/ghostkellz/ghostbridge/archive/refs/heads/main.tar.gz",
-            .hash = "ghostbridge-0.0.0-n3h0pXfKAgAMdSIBtKFfnZrO_lZtQ0EuFxlgNM_MVxNf",
+            .url = "https://github.com/ghostkellz/ghostbridge/archive/main.tar.gz",
+            .hash = "ghostbridge-0.2.0-n3h0pUrHAgBCJffTDgBGYHbNx_iYyxOhGrjzxGFRnShh",
         },
     },
     .paths = .{
